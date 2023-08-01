@@ -1,58 +1,13 @@
-import { Suspense, lazy } from "react";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  createRoutesFromElements,
-} from "react-router-dom";
-const RootLayout = lazy(() => import("./layouts/RootLayout"));
-const Home = lazy(() => import("./pages/Home"));
-const Login = lazy(() => import("./pages/Login"));
-const Hero = lazy(() => import("./pages/Hero"));
-const Profile = lazy(() => import("./pages/Profile"));
-const PageNotFound = lazy(() => import("./components/PageNotFound"));
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { protectedRoutes, publicRoutes } from "@/Routes";
+import Cookies from "js-cookie";
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<RootLayout />}>
-      <Route index element={<Hero />} />
-      <Route path="home" element={<Home />} />
-      <Route path="login" element={<Login />} />
-      <Route path="profile" element={<Profile />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Route>
-  )
-);
-//test
+const App = () => {
+  const authUser = Cookies.get("authUser");
+  const routes = authUser ? protectedRoutes : publicRoutes;
+  const router = createBrowserRouter(routes);
 
-function App() {
-  return (
-    <>
-      <Suspense fallback={<div>Loading...</div>}>
-        <RouterProvider router={router} />
-      </Suspense>
-    </>
-  );
-}
+  return <RouterProvider router={router} />;
+};
 
 export default App;
-
-// function App() {
-//   return (
-//     <Router>
-//       <Suspense fallback={<div>Loading...</div>}>
-//         <Routes>
-//           <Route path="/" element={<RootLayout />}>
-//             <Route index element={<Hero />} />
-//             <Route path="home" element={<Home />} />
-//             <Route path="login" element={<Login />} />
-//             <Route path="profile" element={<Profile />} />
-//             <Route path="*" element={<PageNotFound />} />
-//           </Route>
-//         </Routes>
-//       </Suspense>
-//     </Router>
-//   );
-// }
-
-// export default App;

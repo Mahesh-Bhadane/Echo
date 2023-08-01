@@ -1,25 +1,42 @@
 import React from "react";
-import { Container } from "@mantine/core";
-import Search from "../../components/Searchbar";
+import { CenteredDiv, MainContainer } from "@/pages/Home/style";
+import FooterPage from "@/components/Footer";
+import Search from "@/components/ui/Search";
+import SongCardWrapper from "@/components/SongCardWrapper";
+import { useAppSelector } from "@/app/hooks";
+import { RootState } from "@/app/store";
+import { useMediaQuery } from "@mantine/hooks";
 
 const Home: React.FC = () => {
+  const { songs, status, currentSong, isPlaying } = useAppSelector(
+    (state: RootState) => state.songs
+  );
+  const isMobile = useMediaQuery("(max-width: 640px)");
+
   return (
     <>
-      <Container style={{ display: "flex", justifyContent: "center" }}>
-        <main
-          style={{
-            maxWidth: "800px",
-            width: "100%",
-            paddingTop: "30px",
-            color: "#373b53",
-          }}
-        >
-          <Search />
-          <h2 style={{ textAlign: "center" }}>
-            Hello, Welcome to My Website..!!
-          </h2>
-        </main>
-      </Container>
+      {isMobile ? (
+        <CenteredDiv>
+          <MainContainer>
+            <Search />
+          </MainContainer>
+        </CenteredDiv>
+      ) : (
+        <></>
+      )}
+      <div
+        style={{ padding: "20px", paddingTop: `${!isMobile ? "50px" : "0px"}` }}
+      >
+        <SongCardWrapper
+          songs={songs}
+          status={status}
+          currentSong={currentSong}
+          isPlaying={isPlaying}
+        />
+      </div>
+      {currentSong && (
+        <FooterPage currentSong={currentSong} isPlaying={isPlaying} />
+      )}
     </>
   );
 };

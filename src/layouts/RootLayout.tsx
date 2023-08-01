@@ -1,16 +1,15 @@
-import { Outlet, useLocation } from 'react-router-dom'
-import Navbar from '../components/Navbar'
+import useStyles from "@/pages/Login/style";
+import { Container } from "@mantine/core";
+import { Outlet } from "react-router-dom";
 
-function RootLayout() {
-    const location = useLocation();
+const RootLayout = () => {
 
-    const isHeroPage = location.pathname === "/";
-    return (<>
-        {!isHeroPage && <Navbar />}
-        <main>
-            <Outlet />
-        </main></>
-    )
-}
+  const { classes } = useStyles();
+  return (
+    <Container className={classes.wrapper}>
+      <Outlet />
+    </Container>
+  );
+};
 
-export default RootLayout
+export default RootLayout;
